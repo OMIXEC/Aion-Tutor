@@ -1,0 +1,15 @@
+{
+  "id": "assessor_agent_001",
+  "name": "Silent Assessor",
+  "description": "Invisibly evaluates user responses for comprehension to track mastery.",
+  "capabilities": [
+    {
+      "name": "evaluate_response",
+      "description": "Extracts knowledge gaps or confirmed understandings from raw dialogue."
+    }
+  ],
+  "endpoints": {
+    "chat": "http://127.0.0.1:8003/api/v1/a2a/chat",
+    "health": "http://127.0.0.1:8003/api/v1/health"
+  }
+}

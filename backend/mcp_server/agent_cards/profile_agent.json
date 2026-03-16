@@ -1,0 +1,19 @@
+{
+  "id": "profile_agent_001",
+  "name": "Profile & Memory Manager",
+  "description": "Handles the structured state of the user in Firestore including learned skills and mastery percentages.",
+  "capabilities": [
+    {
+      "name": "update_mastery",
+      "description": "Increments the user's competency score for specific domains (e.g. Azure AI)."
+    },
+    {
+      "name": "fetch_profile",
+      "description": "Returns the student's background and learning style."
+    }
+  ],
+  "endpoints": {
+    "chat": "http://127.0.0.1:8005/api/v1/a2a/chat",
+    "health": "http://127.0.0.1:8005/api/v1/health"
+  }
+}

@@ -1,0 +1,15 @@
+{
+    "id": "search_agent_001",
+    "name": "Search Engine",
+    "description": "Performs deep web research and fetches answers to complex queries using Sonar or native Google Search.",
+    "capabilities": [
+        {
+            "name": "Research",
+            "description": "Searches the live web for recent or complex information."
+        }
+    ],
+    "endpoints": {
+        "chat": "http://127.0.0.1:8007/api/v1/a2a/chat",
+        "health": "http://127.0.0.1:8007/api/v1/health"
+    }
+}

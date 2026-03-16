@@ -1,0 +1,15 @@
+{
+  "id": "planner_agent_001",
+  "name": "Curriculum Planner",
+  "description": "Analyzes an educational request and breaks it into a DAG of foundational and sub-tasks.",
+  "capabilities": [
+    {
+      "name": "create_learning_plan",
+      "description": "Generates a structured syllabus or step-by-step breakdown."
+    }
+  ],
+  "endpoints": {
+    "chat": "http://127.0.0.1:8001/api/v1/a2a/chat",
+    "health": "http://127.0.0.1:8001/api/v1/health"
+  }
+}

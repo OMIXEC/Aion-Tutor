@@ -1,0 +1,15 @@
+{
+  "id": "rag_agent_001",
+  "name": "Pinecone RAG Agent",
+  "description": "Queries educational text buffers and semantic memory using Vector Databases.",
+  "capabilities": [
+    {
+      "name": "semantic_search",
+      "description": "Fetches context for analogies or textbooks based on cosine similarity."
+    }
+  ],
+  "endpoints": {
+    "chat": "http://127.0.0.1:8004/api/v1/a2a/chat",
+    "health": "http://127.0.0.1:8004/api/v1/health"
+  }
+}

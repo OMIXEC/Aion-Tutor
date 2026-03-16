@@ -1,0 +1,19 @@
+{
+  "id": "tutor_agent_001",
+  "name": "Socratic Tutor",
+  "description": "Tutor agent specializing in the Socratic method and Feynman technique to explain complex concepts.",
+  "capabilities": [
+    {
+      "name": "explain_concept",
+      "description": "Breaks down a topic using analogies mapped to the user's prior knowledge."
+    },
+    {
+      "name": "socratic_questioning",
+      "description": "Guides the user to the answer without explicitly providing it."
+    }
+  ],
+  "endpoints": {
+    "chat": "http://127.0.0.1:8002/api/v1/a2a/chat",
+    "health": "http://127.0.0.1:8002/api/v1/health"
+  }
+}
