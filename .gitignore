@@ -74,5 +74,8 @@ bidi-demo/
 docs/
 *.sql
 *.md
+*.db
+.adk/
 !README.md
 !integration_guidelines.md
+!assets/

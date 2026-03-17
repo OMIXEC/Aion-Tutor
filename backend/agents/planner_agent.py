@@ -1,11 +1,10 @@
 import os
-import uvicorn
 import requests
 from google.adk.a2a.utils.agent_to_a2a import to_a2a
 from google.adk.agents.llm_agent import LlmAgent
 from google.adk.tools import google_search
 
-PORT = int(os.environ.get("PORT", 8001))
+PORT = int(os.environ.get("PORT", 8002))
 HOST = os.environ.get("AGENT_HOST", "0.0.0.0")
 
 def execute_sonar_search(query: str) -> str:
@@ -38,24 +37,23 @@ def execute_sonar_search(query: str) -> str:
         return f"Sonar Exception: {e}"
 
 
-def main() -> None:
-    root_agent = LlmAgent(
-        model="gemini-3-pro",
-        name="CurriculumPlanner",
-        tools=[google_search, execute_sonar_search],
-        instruction=(
-            "You are an expert curriculum Planner, operating as an advanced prompt engineer. "
-            "Analyze the student's learning target and intensely integrate their specific context "
-            "(experience, tags, knowledge base, IT certifications) to structure a personalized curriculum sequence. "
-            "Use the `google_search` or `execute_sonar_search` tools to ensure the syllabus strictly includes the latest libraries, methods, or updates required. "
-            "Output ONLY a JSON list of strings (e.g., [\"Authentication with JWT\", \"Postgres Scaling\"]). "
-            "Keep it under 3 extremely tailored items for this demo."
-        )
+root_agent = LlmAgent(
+    model="gemini-3-pro",
+    name="CurriculumPlanner",
+    tools=[google_search, execute_sonar_search],
+    instruction=(
+        "You are an expert curriculum Planner, operating as an advanced prompt engineer. "
+        "Analyze the student's learning target and intensely integrate their specific context "
+        "(experience, tags, knowledge base, IT certifications) to structure a personalized curriculum sequence. "
+        "Use the `google_search` or `execute_sonar_search` tools to ensure the syllabus strictly includes the latest libraries, methods, or updates required. "
+        "Output ONLY a JSON list of strings (e.g., [\"Authentication with JWT\", \"Postgres Scaling\"]). "
+        "Keep it under 3 extremely tailored items for this demo."
     )
-    
-    a2a_app = to_a2a(root_agent, host=HOST, port=PORT)
-    print("Running Curriculum Planner Agent")
-    uvicorn.run(a2a_app, host=HOST, port=PORT)
+)
+
+app = to_a2a(root_agent, host=HOST, port=PORT)
 
 if __name__ == "__main__":
-    main()
+    import uvicorn
+    print("Running Curriculum Planner Agent")
+    uvicorn.run(app, host=HOST, port=PORT)

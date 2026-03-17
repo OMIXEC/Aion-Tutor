@@ -1,6 +1,5 @@
 import os
 import json
-import uvicorn
 from google.adk.a2a.utils.agent_to_a2a import to_a2a
 from google.adk.agents.llm_agent import LlmAgent
 
@@ -46,23 +45,22 @@ def manage_profile(user_id: str, action: str, data: str = "") -> str:
     )
     return context_summary
 
-def main() -> None:
-    root_agent = LlmAgent(
-        model="gemini-3-pro",
-        name="ProfileManager",
-        tools=[manage_profile],
-        instruction=(
-            "You are the Profile & Memory Manager. You will receive a JSON string containing the 'action', "
-            "and optionally 'data' and 'user_id' (if provided in the prompt). "
-            "Extract the 'user_id' from the prompt. If none is provided, use 'guest'. "
-            "Use the `manage_profile` tool to fetch or update the user's profile. "
-            "Output the resulting context summary or update confirmation directly."
-        )
+root_agent = LlmAgent(
+    model="gemini-3-pro",
+    name="ProfileManager",
+    tools=[manage_profile],
+    instruction=(
+        "You are the Profile & Memory Manager. You will receive a JSON string containing the 'action', "
+        "and optionally 'data' and 'user_id' (if provided in the prompt). "
+        "Extract the 'user_id' from the prompt. If none is provided, use 'guest'. "
+        "Use the `manage_profile` tool to fetch or update the user's profile. "
+        "Output the resulting context summary or update confirmation directly."
     )
-    
-    a2a_app = to_a2a(root_agent, host=HOST, port=PORT)
-    print("Running Profile Agent")
-    uvicorn.run(a2a_app, host=HOST, port=PORT)
+)
+
+app = to_a2a(root_agent, host=HOST, port=PORT)
 
 if __name__ == "__main__":
-    main()
+    import uvicorn
+    print("Running Profile Agent")
+    uvicorn.run(app, host=HOST, port=PORT)

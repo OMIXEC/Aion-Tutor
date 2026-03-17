@@ -1,5 +1,4 @@
 import os
-import uvicorn
 import requests
 from google.adk.a2a.utils.agent_to_a2a import to_a2a
 from google.adk.agents.llm_agent import LlmAgent
@@ -37,22 +36,21 @@ def execute_sonar_search(query: str) -> str:
     except Exception as e:
         return f"Sonar Exception: {e}"
 
-def main() -> None:
-    root_agent = LlmAgent(
-        model="gemini-3-pro",
-        name="SearchEngine",
-        tools=[google_search, execute_sonar_search],
-        instruction=(
-            "You are the Search Agent, equipped to find information online. "
-            "Analyze the user's query. If it requires deep research, complex synthesis, or highly specific IT technical details, "
-            "use the `execute_sonar_search` tool. If it is a basic factual question or simple lookup, use the `google_search` tool. "
-            "Return the detailed search results concisely. State which source/tool you used at the end of the response."
-        )
+root_agent = LlmAgent(
+    model="gemini-3-pro",
+    name="SearchEngine",
+    tools=[google_search, execute_sonar_search],
+    instruction=(
+        "You are the Search Agent, equipped to find information online. "
+        "Analyze the user's query. If it requires deep research, complex synthesis, or highly specific IT technical details, "
+        "use the `execute_sonar_search` tool. If it is a basic factual question or simple lookup, use the `google_search` tool. "
+        "Return the detailed search results concisely. State which source/tool you used at the end of the response."
     )
-    
-    a2a_app = to_a2a(root_agent, host=HOST, port=PORT)
-    print("Running Deep Web Search Agent")
-    uvicorn.run(a2a_app, host=HOST, port=PORT)
+)
+
+app = to_a2a(root_agent, host=HOST, port=PORT)
 
 if __name__ == "__main__":
-    main()
+    import uvicorn
+    print("Running Deep Web Search Agent")
+    uvicorn.run(app, host=HOST, port=PORT)
