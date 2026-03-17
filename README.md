@@ -22,6 +22,14 @@ Our architecture leverages a specialized fleet of AI agents, each optimized for 
 - **Real-time Synchronization:** Powered by Supabase for instant data persistence and real-time updates.
 - **Modern Tech Stack:** Built with Next.js (Frontend), FastAPI/ADK (Backend), and Google Gemini (AI Models).
 
+## 🔐 Security & Authentication
+
+Aion Tutor prioritizes a "Clean Auth" architecture:
+- **Zero-Friction Integration:** Leverages Supabase Auth for secure, production-ready user management without the overhead of custom session logic.
+- **Secure Backend:** Implements JWT validation at the API layer to ensure all agent interactions are authorized.
+- **Environment Driven:** Sensitive credentials are never committed to the repository; local testing uses safe placeholders and `.env.example` configurations.
+- **Ephemeral Sessions:** Agent state is persisted securely in Supabase, with local temporary databases excluded from source control.
+
 ## 🛠 Tech Stack
 
 - **Large Language Models:** Google Gemini 3.0 Pro & Flash
