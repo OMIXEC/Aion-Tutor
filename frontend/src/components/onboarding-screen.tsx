@@ -13,6 +13,8 @@ export function OnboardingScreen({ onComplete }: { onComplete: (profile: any) =>
   const [selectedCerts, setSelectedCerts] = useState<string[]>([]);
   const [tags, setTags] = useState("");
   const [knowledge, setKnowledge] = useState("");
+  const [tasks, setTasks] = useState("");
+  const [requirements, setRequirements] = useState("");
   const [useDeepSearch, setUseDeepSearch] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -40,6 +42,8 @@ export function OnboardingScreen({ onComplete }: { onComplete: (profile: any) =>
             certifications: selectedCerts.join(", "),
             tags: tags,
             knowledge: knowledge,
+            tasks: tasks,
+            requirements: requirements,
             use_deep_search: useDeepSearch
         });
         setIsLoading(false);
@@ -144,13 +148,34 @@ export function OnboardingScreen({ onComplete }: { onComplete: (profile: any) =>
                 </div>
             </div>
 
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                    <label className="text-[10px] uppercase font-bold text-slate-400 ml-1 tracking-wider">Current Knowledge Base</label>
+                    <textarea
+                        placeholder="Briefly describe your existing technical background..."
+                        className="w-full bg-white border border-slate-200 text-slate-900 h-24 p-3 rounded-md focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none resize-none text-sm font-medium shadow-sm"
+                        value={knowledge}
+                        onChange={(e) => setKnowledge(e.target.value)}
+                    />
+                </div>
+                <div className="space-y-2">
+                    <label className="text-[10px] uppercase font-bold text-slate-400 ml-1 tracking-wider">Current / Immediate Tasks</label>
+                    <textarea
+                        placeholder="What are you working on right now? (e.g. migrating DB, writing tests)"
+                        className="w-full bg-white border border-slate-200 text-slate-900 h-24 p-3 rounded-md focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none resize-none text-sm font-medium shadow-sm"
+                        value={tasks}
+                        onChange={(e) => setTasks(e.target.value)}
+                    />
+                </div>
+            </div>
+
             <div className="space-y-2">
-                <label className="text-[10px] uppercase font-bold text-slate-400 ml-1 tracking-wider">Current Knowledge Base</label>
-                <textarea 
-                    placeholder="Briefly describe your existing technical background..." 
-                    className="w-full bg-white border border-slate-200 text-slate-900 h-24 p-3 rounded-md focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none resize-none text-sm font-medium shadow-sm"
-                    value={knowledge}
-                    onChange={(e) => setKnowledge(e.target.value)}
+                <label className="text-[10px] uppercase font-bold text-slate-400 ml-1 tracking-wider">Specific Requirements</label>
+                <textarea
+                    placeholder="List out any constraints or specific requirements for your learning or tasks..."
+                    className="w-full bg-white border border-slate-200 text-slate-900 h-20 p-3 rounded-md focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none resize-none text-sm font-medium shadow-sm"
+                    value={requirements}
+                    onChange={(e) => setRequirements(e.target.value)}
                 />
             </div>
 

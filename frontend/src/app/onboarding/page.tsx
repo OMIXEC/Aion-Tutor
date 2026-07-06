@@ -41,7 +41,10 @@ export default function OnboardingPage() {
             knowledge: profileData.knowledge,
             certifications: profileData.certifications,
             experience_level: profileData.experience_level,
-            use_deep_search: profileData.use_deep_search
+            use_deep_search: profileData.use_deep_search,
+            tasks: profileData.tasks,
+            tags: profileData.tags,
+            requirements: profileData.requirements
         };
 
         const { error } = await supabase.from("profiles").upsert(newProfile);

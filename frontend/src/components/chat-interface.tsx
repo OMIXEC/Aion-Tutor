@@ -80,7 +80,7 @@ export function ChatInterface({ profile, userId, sessionId, onAgentChange }: {
     
     const initSocket = async () => {
       const wsBaseUrl = process.env.NEXT_PUBLIC_BACKEND_WS_URL || "ws://localhost:8000";
-      const wsUrl = `${wsBaseUrl}/ws/session/${activeSessionId}`;
+      const wsUrl = `${wsBaseUrl}/ws/session/${userId || "anon"}/${activeSessionId}`;
       ws = new WebSocket(wsUrl);
 
       ws.onopen = () => console.log("[WS] Connected to Aion Bidi-Stream");
@@ -193,14 +193,10 @@ export function ChatInterface({ profile, userId, sessionId, onAgentChange }: {
                 reader.onloadend = () => {
                     const result = reader.result as string;
                     const base64data = result.split(',')[1];
-                    socketRef.current?.send(JSON.stringify({
-                        realtime_input: {
-                            media_chunks: [{
-                                mime_type: mimeType,
-                                data: base64data
-                            }]
-                        }
-                    }));
+                    // Send raw bytes if possible, or use the format expected by app.py
+                    // Our app.py handles binary bytes directly
+                    const binaryData = Uint8Array.from(atob(base64data), c => c.charCodeAt(0));
+                    socketRef.current?.send(binaryData);
                 };
             }
         };
@@ -234,9 +230,10 @@ export function ChatInterface({ profile, userId, sessionId, onAgentChange }: {
     const userMsg = { id: Date.now().toString(), role: "user", content: input, agentType: "User" };
     setMessages(prev => [...prev, userMsg]);
     
-    // Send via WebSocket in format expected by orchestrator
+    // Send via WebSocket in format expected by orchestrator (Bidi-demo pattern)
     socketRef.current.send(JSON.stringify({
-      message: input,
+      type: "text",
+      text: input,
       user_id: userId,
       profile: profile 
     }));

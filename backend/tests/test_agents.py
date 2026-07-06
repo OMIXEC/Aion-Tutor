@@ -11,7 +11,7 @@ os.environ.setdefault("GEMINI_API_KEY", "mock_key_for_testing")
 os.environ.setdefault("SUPABASE_URL", "")
 os.environ.setdefault("SUPABASE_SERVICE_ROLE_KEY", "")
 
-from app import app
+from main import app
 
 client = TestClient(app)
 
@@ -22,7 +22,7 @@ class TestHealthEndpoint:
         assert response.status_code == 200
 
     def test_health_returns_agent_info(self):
-        data = response = client.get("/health").json()
+        data = client.get("/health").json()
         assert data["status"] == "healthy"
         assert data["agent"] == "aion_orchestrator"
         assert isinstance(data["sub_agents"], list)
@@ -43,12 +43,14 @@ class TestHealthEndpoint:
 
 class TestAgentStructure:
     def test_root_agent_importable(self):
-        from aion_tutor.agent import root_agent
+        from agents import root_agent
         assert root_agent.name == "aion_orchestrator"
 
-    def test_root_agent_has_six_sub_agents(self):
-        from aion_tutor.agent import root_agent
-        assert len(root_agent.sub_agents) == 6
+    def test_root_agent_has_six_tools(self):
+        from agents import root_agent
+        # Since we use tools for A2A delegation now
+        assert len(root_agent.tools) == 6
+
 
     def test_tools_importable(self):
         from aion_tutor.tools import (

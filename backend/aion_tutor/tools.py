@@ -102,15 +102,15 @@ async def search_semantic_memories(user_id: str, query: str, tool_context: Optio
 # ═══════════════════════════════════════════════════════════════════════════════
 
 async def fetch_user_profile(user_id: str, tool_context: Optional[ToolContext] = None) -> str:
-    """Fetch the user's profile, including background, goals, and current mastery levels."""
+    """Fetch the user's profile, including background, goals, tasks, tags, requirements, and current mastery levels."""
     try:
         supabase = get_supabase_client()
         resp = supabase.table("profiles").select("*").eq("id", user_id).execute()
         if len(resp.data) > 0:
             return json.dumps(resp.data[0])
-        return "User profile not found. Suggest they complete onboarding."
+        return f"User profile not found for ID: {user_id}. Suggest they complete onboarding."
     except Exception as e:
-        return f"Error fetching profile: {str(e)}"
+        return f"Error fetching profile for {user_id}: {str(e)}"
 
 async def update_profile(user_id: str, mission: str = None, goal: str = None, background: str = None, tool_context: Optional[ToolContext] = None) -> str:
     """Update high-level user profile fields."""
@@ -121,10 +121,15 @@ async def update_profile(user_id: str, mission: str = None, goal: str = None, ba
         if goal: data_to_update["goal"] = goal
         if background: data_to_update["background"] = background
         
-        supabase.table("profiles").update(data_to_update).eq("id", user_id).execute()
+        resp = supabase.table("profiles").update(data_to_update).eq("id", user_id).execute()
+        if len(resp.data) == 0:
+            # Check if user exists but nothing changed, or user doesn't exist
+            check = supabase.table("profiles").select("id").eq("id", user_id).execute()
+            if len(check.data) == 0:
+                return f"Error updating profile: User {user_id} not found in profiles table."
         return "Profile successfully updated."
     except Exception as e:
-        return f"Error updating profile: {str(e)}"
+        return f"Error updating profile for {user_id}: {str(e)}"
 
 async def update_topic_mastery(user_id: str, topic: str, confidence: float, reasoning: str, tool_context: Optional[ToolContext] = None) -> str:
     """Update the user's mastery score for a specific curriculum topic."""
